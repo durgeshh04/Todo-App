@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { AuthRepo } from './repository/auth.repo';
 
 @Injectable()
 export class AuthenticationService {
-  constructor() {}
+  constructor(private readonly authRepo: AuthRepo) {}
 
   async signup(user: any): Promise<any> {
-    console.log('This is signup method');
-    return user;
+    return this.authRepo.createUser(user);
   }
 
   async login(user: any): Promise<any> {
-    console.log('This is login method');
     return user;
   }
 }
