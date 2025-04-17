@@ -11,4 +11,8 @@ export class AuthRepo {
   async createUser(user: any): Promise<any> {
     return await this.authRepo.save(user);
   }
+
+  async findUserByEmail(email: string) {
+    return await this.authRepo.findOne({ where: { email } });
+  }
 }
