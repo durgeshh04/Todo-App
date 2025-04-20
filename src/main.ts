@@ -5,9 +5,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Todo API')
-    .setDescription('Simple Todo API with Swagger')
+    .setTitle('Todo API Documentation')
+    .setDescription('Todo Application')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
