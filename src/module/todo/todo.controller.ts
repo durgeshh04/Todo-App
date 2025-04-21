@@ -1,7 +1,18 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dtos/create.dto';
+import { UpdateTodoDto } from './dtos/update.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestUser } from './interfaces/request-with-user.interface';
 
@@ -13,7 +24,11 @@ export class TodoController {
 
   @UseGuards(JwtAuthGuard)
   @Get('todos')
-  async findAllTodos(@Req() req: RequestUser, @Query('page') page: string, @Query('limit') limit: string): Promise<string> {
+  async findAllTodos(
+    @Req() req: RequestUser,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ): Promise<string> {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
     return this.todoService.findAllTodos(req.user.id, pageNum, limitNum);
@@ -26,5 +41,15 @@ export class TodoController {
     @Req() req: RequestUser,
   ): Promise<any> {
     return this.todoService.createTodo(todo, req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  async updateTodo(
+    @Body() dto: UpdateTodoDto,
+    @Param('id') id: string,
+    @Req() req: RequestUser,
+  ) {
+    return this.todoService.updateTodo(id, dto);
   }
 }

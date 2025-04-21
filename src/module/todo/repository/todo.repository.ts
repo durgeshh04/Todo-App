@@ -32,4 +32,9 @@ export class TodoRepo {
     const data = this.todoRepo.create({ ...todo, user: { id: id } });
     return await this.todoRepo.save(data);
   }
+
+  async updateTodo(id: string, dto: any) {
+    return this.todoRepo.update(id, dto);
+  }
+  
 }
