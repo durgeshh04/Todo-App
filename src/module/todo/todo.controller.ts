@@ -5,11 +5,13 @@ import {
   Param,
   Post,
   Put,
+  Delete,
   Query,
   Req,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dtos/create.dto';
 import { UpdateTodoDto } from './dtos/update.dto';
@@ -23,6 +25,8 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @UseGuards(JwtAuthGuard)
+  @ApiQuery({name: 'page', example: 1})
+  @ApiQuery({name: 'limit', example: 5})
   @Get('todos')
   async findAllTodos(
     @Req() req: RequestUser,
@@ -44,12 +48,14 @@ export class TodoController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
-  async updateTodo(
-    @Body() dto: UpdateTodoDto,
-    @Param('id') id: string,
-    @Req() req: RequestUser,
-  ) {
+  @Patch(':id')
+  async updateTodo(@Body() dto: UpdateTodoDto, @Param('id') id: string) {
     return this.todoService.updateTodo(id, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteTodo(@Param('id') id: string) {
+    return this.todoService.deleteTodo(id);
   }
 }

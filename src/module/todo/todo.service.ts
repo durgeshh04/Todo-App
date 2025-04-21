@@ -15,4 +15,8 @@ export class TodoService {
   async updateTodo(id: string, dto: any): Promise<any> {
     return this.todoRepo.updateTodo(id, dto);
   }
+
+  async deleteTodo(id: string) {
+    return this.todoRepo.deleteTodo(id);
+  }
 }
